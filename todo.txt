@@ -1,0 +1,7 @@
+Overview:
+Develop a docker container that I can use to deploy a minecraft server to linode.
+Tech:
+- Docker
+- Jenkins
+- Linode
+
