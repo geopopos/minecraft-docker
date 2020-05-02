@@ -23,9 +23,11 @@ pipeline {
 				}
 				steps {
 					retry(3) {	
-						sh 'docker tag papermc-prod:latest groros/papermc-prod:latest'
-                            			sh 'docker push groros/papermc-prod:latest'
-                            			sh 'docker save groros/papermc-prod:latest | gzip > papermc-prod-golden.tar.gz'
+						timeout(time:10, unit: 'MINUTES') {
+							sh 'docker tag papermc-prod:latest groros/papermc-prod:latest'
+                            				sh 'docker push groros/papermc-prod:latest'
+                            				sh 'docker save groros/papermc-prod:latest | gzip > papermc-prod-golden.tar.gz'
+						}
 					}
 				}
 			}
