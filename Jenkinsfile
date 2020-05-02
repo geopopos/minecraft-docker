@@ -7,7 +7,7 @@ pipeline {
 		// Bilding your Test Images
 			stage('BUILD') {
 				steps {
-					sh 'docker build -f express-image/Dockerfile \
+					sh 'docker build -f Dockerfile \
 					-t papermc-prod:latest .'
 				}
 			}
