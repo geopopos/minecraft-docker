@@ -1,23 +1,51 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      steps {
-        echo 'This is the Build Stage'
-      }
-    }
 
-    stage('Test') {
-      steps {
-        echo 'This is the Testing Stage'
-      }
-    }
+	environment {
+		DOCKER = credentials('docker-hub')
+	}
+	agent any
+		stages {
+		// Bilding your Test Images
+			stage('BUILD') {
+				steps {
+					sh 'docker build -f Dockerfile \
+					-t papermc-prod:latest .'
+				}
+			}
+			stage('Test') {
+				steps {
+					echo 'This is the Testing Stage'
+				}
+			}
+// Deploying the minecraft server
+			stage('DEPLOY') {
+				when {
+					branch 'master' // only run these steps on master branch
+				}
+				steps {
+					retry(3) {	
+						timeout(time:10, unit: 'MINUTES') {
+							sh 'docker tag papermc-prod:latest groros/papermc-prod:latest'
+                            				sh 'docker push groros/papermc-prod:latest'
+                            				sh 'docker save groros/papermc-prod:latest | gzip > papermc-prod-golden.tar.gz'
+						}
+					}
+				}
+				post {
+					failure {
+						// sh 'docker stop papermc-prod'
+						sh 'docker system prune -f'
+						deleteDir()
+					}
+				}
+			}
+// Doing containers clean-up to avoid conflicts in future builds
+    			stage('CLEAN-UP') {
+      				steps {
+        				sh 'docker system prune -f'
+        				deleteDir()
+      				}
+    			}
+		}
+	}
 
-    stage('Deploy') {
-      steps {
-        echo 'This is the Deploy Stage'
-      }
-    }
-
-  }
-}
