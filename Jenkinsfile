@@ -30,12 +30,12 @@ pipeline {
 						}
 					}
 				}
-			}
-			post {
-				failure {
-					sh 'docker stop papermc-prod'
-					sh 'docker system prune -f'
-					deleteDir()
+				post {
+					failure {
+						sh 'docker stop papermc-prod'
+						sh 'docker system prune -f'
+						deleteDir()
+					}
 				}
 			}
 // Doing containers clean-up to avoid conflicts in future builds
