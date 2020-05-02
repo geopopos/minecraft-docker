@@ -32,7 +32,7 @@ pipeline {
 				}
 				post {
 					failure {
-						sh 'docker stop papermc-prod'
+						// sh 'docker stop papermc-prod'
 						sh 'docker system prune -f'
 						deleteDir()
 					}
