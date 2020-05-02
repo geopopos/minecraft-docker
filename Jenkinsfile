@@ -41,7 +41,6 @@ pipeline {
 // Doing containers clean-up to avoid conflicts in future builds
     			stage('CLEAN-UP') {
       				steps {
-        				sh 'docker stop papermc-prod'
         				sh 'docker system prune -f'
         				deleteDir()
       				}
