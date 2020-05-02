@@ -9,7 +9,7 @@ pipeline {
 			stage('BUILD') {
 				steps {
 					sh 'docker build -f Dockerfile \
-					-t papermc-prod:latest .'
+					-t papermc-prod:trunk .'
 				}
 			}
 			stage('Test') {
@@ -25,9 +25,9 @@ pipeline {
 				steps {
 					retry(3) {	
 						timeout(time:10, unit: 'MINUTES') {
-							sh 'docker tag papermc-prod:latest groros/papermc-prod:latest'
-                            				sh 'docker push groros/papermc-prod:latest'
-                            				sh 'docker save groros/papermc-prod:latest | gzip > papermc-prod-golden.tar.gz'
+							sh 'docker tag papermc-prod:trunk groros/papermc-prod:trunk'
+                            				sh 'docker push groros/papermc-prod:trunk'
+                            				sh 'docker save groros/papermc-prod:trunk | gzip > papermc-prod-golden.tar.gz'
 						}
 					}
 				}
